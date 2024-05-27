@@ -1,12 +1,9 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-// import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
@@ -14,7 +11,6 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
-// TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme({
   palette: {
@@ -27,7 +23,7 @@ const defaultTheme = createTheme({
   },
 });
 
-export default function Login() {
+export default function SignUp() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -55,7 +51,7 @@ export default function Login() {
           <Typography component="h1" variant="h5"
           sx={{color: '#091156'}}
           >
-            Sign in
+            Sign up
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -78,8 +74,25 @@ export default function Login() {
               id="password"
               autoComplete="current-password"
             />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="confirm password"
+              label="Confirm password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
             <FormControlLabel 
-              control={<Checkbox value="remember" color="primary" />}
+              control={<Checkbox value="remember" color="primary"
+            sx={{
+              '&.Mui-checked	': {
+                color: '#FF4081',
+                opacity: [0.9, 0.8, 0.7],
+              }
+            }}
+              />}
               label="Remember me"
               
             />
@@ -87,26 +100,16 @@ export default function Login() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2, bgcolor: '#FF64AE' }}
+              sx={{ mt: 3, mb: 2, bgcolor: '#FF64AE',
+              '&:hover': {
+                bgcolor: '#FF4081',
+                opacity: [0.9, 0.8, 0.7],
+              }
+               }}
               >
-              Sign In
+              Sign Up
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2"
-                sx={{color: '#8B8B8B' }}
-                >
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2"
-                sx={{color: '#8B8B8B' }}
-                >
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
+            
           </Box>
         </Box>
       </Container>

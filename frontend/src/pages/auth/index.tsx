@@ -1,8 +1,9 @@
-import Login from './components/Login'
-const index = () => {
+import Login from './Login/Login'
+import SignUp from './SignUp/SignUp'
+const index = (props:any) => {
   return (
     <>
-        <Login />
+        {props.isLogin ? <Login /> : <SignUp />}
     </>
   )
 }
