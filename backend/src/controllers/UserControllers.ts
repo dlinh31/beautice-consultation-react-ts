@@ -1,58 +1,101 @@
 import client from './ConnectDBControllers';
+import Joi from 'joi';
+import bcrypt from 'bcrypt'
+import {Request, Response} from 'express';
+import { generateToken } from './JWTControllers';
 
-const queryAll = async ( table: string) => {
+
+const userSchema = Joi.object({
+  email: Joi.string().email().max(30).required(),
+  password: Joi.string().min(6).required(), 
+  first_name: Joi.string().max(30).required(),
+  last_name: Joi.string().max(30).required(),
+});
+
+interface userObject {
+  email: string,
+  password: string,
+  first_name: string,
+  last_name: string
+}
+
+const validateUser = async(userData: userObject) => {
+  const { error } = userSchema.validate(userData);
+  if (error) {
+     return (error.details[0].message);
+  }
+  return 
+}
+
+const findExistingEmail = async (email: string) => {
+    try {
+        const result = await client.query(`SELECT * FROM users WHERE email='${email}';`);
+        return result.rows.length > 0;
+      } catch (err) {
+        console.error('Error executing query', (err as Error).stack); 
+        return false; 
+      }
+}
+
+const SignUpUser = async(req:Request, res:Response) => {
+    const { email, password, first_name, last_name} = req.body;
+    const error = await validateUser({email, password, first_name, last_name});
+    if (error){
+      res.status(400).json({error: "Unknown server error at SignUpUser"});
+      return
+    }
+    if (!email || !password || !first_name || !last_name){
+      res.status(400).json({error: "Please enter all required fields"});
+      return;
+    }
+
+    const emailExist = await findExistingEmail(email);
+    if (emailExist){
+        console.log("email already existed")
+        res.status(400).json({error: "Email already existed. Please register with another email"})
+        return
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPass = await bcrypt.hash(password, salt);
+
+    try {
+        const result = await client.query(`INSERT INTO users (email, password, first_name, last_name) 
+        VALUES ($1, $2, $3, $4) RETURNING id, email, first_name, last_name`, [email, hashedPass, first_name, last_name]);
+        res.status(200).json(result.rows[0])
+      } catch (err) {
+        console.error('Error executing query', (err as Error).stack);
+        throw err; 
+      }
+}
+
+
+const SignInUser = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+  
+  if (!email || !password){
+      res.status(400).json({error: "Please enter all required fields."});
+      return;
+  }
+
   try {
-    const result = await client.query(`SELECT * FROM "${table}";`);
-    return result.rows;
-  } catch (err) {
-    console.error('Error executing query', err.stack);
-    throw err;  // Rethrow or handle as needed
+    const userResult = await client.query('SELECT * FROM users WHERE email = $1 ;', [email]);
+    if (userResult.rowCount === 0) {
+        res.status(404).json({error: "User not found."});
+        return;
+    }
+
+    const user = userResult.rows[0];
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    if (!isValidPassword) {
+        res.status(401).json({error: "Incorrect password."});
+        return;
+    }
+
+    res.status(200).json({id: user.id, email:user.email, first_name: user.first_name, last_name: user.last_name});
+} catch (err) {
+    console.error('Error executing query', err);
+    res.status(500).json({error: "An error occurred while processing your request."});
   }
 };
 
-const findExistingUsername = async (username: string) => {
-    try {
-        const result = await client.query(`SELECT * FROM users WHERE username='${username}';`);
-        return result.rows.length > 0;
-      } catch (err) {
-        console.error('Error executing query', err.stack);
-        throw err;  // Rethrow or handle as needed
-      }
-}
-
-const SignUpUser = async(req, res) => {
-    const { username, password } = req.body;
-
-    const usernameExist = await findExistingUsername(username);
-    if (usernameExist){
-        console.log("Username already existed")
-        res.status(400).send("Username already existed.")
-    }
-    else{
-        try {
-            const result = await client.query(`INSERT INTO users (username, password) VALUES ('${username}', '${password}');`);
-            res.status(200).send(result)
-          } catch (err) {
-            console.error('Error executing query', err.stack);
-            throw err;  // Rethrow or handle as needed
-          }
-    }
-    
-}
-
-
-const SignInUser = async(req,res) => {
-    const { username, password } = req.body;
-    try {
-        const result = await client.query(`SELECT * FROM users WHERE username='${username}' AND password='${password}';`);
-        res.status(200).send(result);
-      } catch (err) {
-        console.error('Error executing query', err.stack);
-        res.status(400).send(err)
-      }
-}
-
-module.exports = {
-    SignUpUser,
-    SignInUser
-}
+export {SignInUser, SignUpUser}

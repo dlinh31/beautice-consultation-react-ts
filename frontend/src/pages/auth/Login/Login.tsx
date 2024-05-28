@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -6,25 +6,46 @@ import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { ThemeProvider } from '@mui/material/styles';
-
+import { userSignInAPI, userSignUpAPI } from '../api/AuthRequests';
 
 
 import { CustomTextField, Title, CustomTheme } from '../components';
 
+interface userLoginObject {
+  email: string,
+  password: string
+}
+const userLogin = async (userInfo:userLoginObject) => {
+  const response = await userSignInAPI(userInfo);
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
+  // if (!response.ok) {
+  //   setError(data.error); 
+  // }
+}
 
 
 export default function Login() {
+  const [error, setError] = useState("This is error")
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+
+    const userInfo = {
+      email: data.get('email') as string,
+      password: data.get('password') as string,
+    }
     console.log({
       email: data.get('email'),
       password: data.get('password'),
     });
+
+    userLogin(userInfo);
+
   };
+
+
+
 
   return (
     <div className='h-screen w-full flex items-center justify-center content-center'>
@@ -38,7 +59,7 @@ export default function Login() {
                 <Title className='text-3xl'>Sign in</Title>
   
                 <a href="/signup" className='text-2nd-color underline py-4'>New to Beautice? Sign up here</a>
-              <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+              <Box component="form" onSubmit={handleSubmit}  sx={{ mt: 1 }}>
                 <CustomTextField
                 id="email"
                 label="Email Address"
@@ -65,6 +86,12 @@ export default function Login() {
                   label="Remember me"
                   
                 />
+
+                {error && (
+            <div className="mb-4 p-2 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <strong className="font-bold">Error!</strong>
+                <span className="block sm:inline"> {error}</span>
+            </div>)}
                 <Button
                   type="submit"
                   fullWidth
