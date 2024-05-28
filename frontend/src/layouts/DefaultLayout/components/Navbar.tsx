@@ -66,7 +66,7 @@ const Navbar = () => {
     <NavbarContainer>
         <Logo src={logo} alt="Main Logo" />
         <NavbarList isActive={active}>
-            <NavItem>Home +</NavItem>
+            <NavItem className='text-[#091156]'>Home +</NavItem>
             <NavItem>About</NavItem>
             <NavItem>Service</NavItem>
             <NavItem>Gallery</NavItem>

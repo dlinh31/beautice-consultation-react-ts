@@ -9,4 +9,3 @@ app.use(express.json())
 app.use('/', userRoutes)
 
 app.listen(3001, () => console.log("Listening at port 3001"))
-

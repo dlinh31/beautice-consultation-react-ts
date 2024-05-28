@@ -1,11 +1,6 @@
 import client from './ConnectDBControllers';
 
-// A whitelist of table names to prevent SQL injection
-
 const queryAll = async ( table: string) => {
-  // Validate table name against a whitelist
-  
-
   try {
     const result = await client.query(`SELECT * FROM "${table}";`);
     return result.rows;

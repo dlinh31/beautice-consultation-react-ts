@@ -33,7 +33,7 @@ const Text = styled.p`
 `
 
 const ImageContainer = styled.div`
-    ${tw`mt-[2.6875rem] max-w-[29.75rem] h-[21.875rem] overflow-hidden rounded-[12%]
+    ${tw`mt-[2.6875rem] max-w-[29.75rem] h-[21.875rem] overflow-hidden rounded-[12.6%]
     shadow-[0px 0px 50px 25px rgba(255, 255, 255, 1)]
     lg:(w-full self-center)
     `}
@@ -55,7 +55,7 @@ const Footer = styled.div`
     `}
 `
 const Button = styled.button`
-  ${tw`cursor-pointer rounded-[50px] p-[1.0625rem 2.88rem] mt-[0.0625rem] border-none 
+  ${tw`cursor-pointer rounded-[50px] p-[1.0625rem 2.9375rem] mt-[0.0625rem] border-none 
   bg-3rd-color text-white self-center font-semibold leading-[1.5rem] shadow-[0px 17px 22px 0px rgba(255, 237, 246, 1)]
    hover:text-white
    `}

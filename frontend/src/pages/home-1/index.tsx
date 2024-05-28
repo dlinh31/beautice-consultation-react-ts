@@ -1,11 +1,13 @@
-import Hero from './components/Hero'
-import SlideButton from './components/SlideButton'
-import Services from './components/Services'
-import ServiceCards from './components/ServiceCards'
-import AboutUs from './components/AboutUs'
-import Experts from './components/Experts'
-import ExpertCards from './components/ExpertCards'
-import ContactUs from './components/ContactUs'
+import {
+  Hero, 
+  SlideButton, 
+  Services, 
+  ServiceCards, 
+  AboutUs, 
+  Experts, 
+  ExpertCards, 
+  ContactUs} from './components'
+
 const Home1 = () => {
   return (
     <>

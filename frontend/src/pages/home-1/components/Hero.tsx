@@ -1,4 +1,3 @@
-import React, {useState} from 'react';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 import HeroImage from '../../../assets/hero-image.svg';
@@ -35,7 +34,7 @@ const Button = styled.button`
    `}
 `;
 const ImageContainer = styled.div`
-    ${tw `lg:(mt-[2rem] ml-0)`}
+    ${tw `mr-[3px] lg:(mt-[2rem] ml-0)`}
 `
 
 const Image = styled.img`
