@@ -68,8 +68,8 @@ const ServiceCards = () => {
     <div>
 
     <Container>
-        {cardContent.map((card) => (
-            <Card image={card.image} title={card.title} />
+        {cardContent.map((card,index) => (
+            <Card key={index} image={card.image} title={card.title} />
         ))}
     </Container>
     <Bg src={BgImage} />

@@ -69,7 +69,6 @@ const Bg = styled.img`
 
 const Card = ({image, title, name}: {image: string; title: string; name: string}) => {
     return (
-
         <CardContainer>
             <Image src={image}/>
             <Title>{title}</Title>
@@ -86,18 +85,18 @@ const Card = ({image, title, name}: {image: string; title: string; name: string}
 }
 
 const ExpertCards = () => {
-  return (
-    <div>
-        
-    <Container>
-        {cardContent.map((card) => (
-            <Card image={card.image} title={card.title} name={card.name}/>
-        ))}
-        
-    </Container>
-    <Bg src={BgImage} />
-    </div>
-  )
-}
+    return (
+        <div>
+            <Container>
+                {cardContent.map((card, index) => (
+                    <Card key={index} image={card.image} title={card.title} name={card.name} />
+                ))}
+            </Container>
+            <Bg src={BgImage} />
+        </div>
+    );
+};
+
+
 
 export default ExpertCards

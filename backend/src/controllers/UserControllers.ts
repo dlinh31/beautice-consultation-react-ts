@@ -37,41 +37,47 @@ const findExistingEmail = async (email: string) => {
       }
 }
 
-const SignUpUser = async(req:Request, res:Response) => {
-    const { email, password, first_name, last_name} = req.body;
-    const error = await validateUser({email, password, first_name, last_name});
-    if (error){
-      res.status(400).json({error: "Unknown server error at SignUpUser"});
-      return
-    }
-    if (!email || !password || !first_name || !last_name){
-      res.status(400).json({error: "Please enter all required fields"});
+const SignUpUser = async (req: Request, res: Response) => {
+  const { email, password, first_name, last_name } = req.body;
+
+  // Check if all required fields are provided
+  if (!email || !password || !first_name || !last_name) {
+      res.status(400).json({ error: "Please enter all required fields" });
       return;
-    }
+  }
 
-    const emailExist = await findExistingEmail(email);
-    if (emailExist){
-        console.log("email already existed")
-        res.status(400).json({error: "Email already existed. Please register with another email"})
-        return
-    }
-    const salt = await bcrypt.genSalt(10);
-    const hashedPass = await bcrypt.hash(password, salt);
+  // Validate user data
+  const validationError = await validateUser({ email, password, first_name, last_name });
+  if (validationError) {
+      res.status(400).json({ error: validationError });
+      return;
+  }
 
-    try {
-        const result = await client.query(`INSERT INTO users (email, password, first_name, last_name) 
-        VALUES ($1, $2, $3, $4) RETURNING id, email, first_name, last_name`, [email, hashedPass, first_name, last_name]);
-        res.status(200).json(result.rows[0])
-      } catch (err) {
-        console.error('Error executing query', (err as Error).stack);
-        throw err; 
-      }
-}
+  // Check if email already exists
+  if (await findExistingEmail(email)) {
+      res.status(409).json({ error: "Email already exists. Please register with another email." });
+      return;
+  }
+
+  // Hash password
+  const hashedPassword = await bcrypt.hash(password, 10);  // Use a salt round of 10
+
+  // Insert user into database
+  try {
+      const result = await client.query(
+          'INSERT INTO users (email, password, first_name, last_name) VALUES ($1, $2, $3, $4) RETURNING id, email, first_name, last_name',
+          [email, hashedPassword, first_name, last_name]
+      );
+      res.status(200).json(result.rows[0]);  // Successful creation
+  } catch (err) {
+      console.error('Error executing query', err);
+      res.status(500).json({ error: "Failed to create user" });
+  }
+};
 
 
 const SignInUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  
   if (!email || !password){
       res.status(400).json({error: "Please enter all required fields."});
       return;
@@ -87,11 +93,11 @@ const SignInUser = async (req: Request, res: Response) => {
     const user = userResult.rows[0];
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
-        res.status(401).json({error: "Incorrect password."});
-        return;
-    }
-
-    res.status(200).json({id: user.id, email:user.email, first_name: user.first_name, last_name: user.last_name});
+          res.status(401).json({error: "Incorrect password."});
+          return;
+      }
+    const token = generateToken(user.id)
+    res.status(200).json({id: user.id, email:user.email, first_name: user.first_name, last_name: user.last_name, token: token});
 } catch (err) {
     console.error('Error executing query', err);
     res.status(500).json({error: "An error occurred while processing your request."});

@@ -1,12 +1,23 @@
 import {useState} from 'react';
-
 import tw from 'twin.macro';
 import styled from 'styled-components';
 import logo from '../../../assets/main-logo.svg'; 
 import hamburger from '../../../assets/navbar-hamburger.png';
 import cross from '../../../assets/navbar-cross.png';
+import { useAtom } from 'jotai';
+import { userAtom } from '../../../context/userAtom';
+import { defaultUser } from '../../../context/userAtom';
+import { useNavigate } from 'react-router-dom';
 
-
+const UserInfo = () => {
+  const [user] = useAtom(userAtom);
+  
+  return (
+    <>
+    {user ? (<p>Welcome {user.first_name} {user.last_name}!</p>) : null}
+    </>
+  )
+}
 
 const NavbarContainer = styled.div`
   ${tw`flex justify-between items-center mt-[2.5rem] pt-0 
@@ -55,6 +66,12 @@ const Menu = styled.img.withConfig({
 
 
 const Navbar = () => {
+  const [user, setUser] = useAtom(userAtom);
+  const navigate = useNavigate();
+  const logout = () => {
+    setUser(defaultUser);
+    navigate('/login');
+  }
   const [active, setActive] = useState(false);
   const handleClick = () => {
     console.log('active')
@@ -66,17 +83,16 @@ const Navbar = () => {
     <NavbarContainer>
         <Logo src={logo} alt="Main Logo" />
         <NavbarList isActive={active}>
+            <UserInfo />
             <NavItem className='text-[#091156]'>Home +</NavItem>
             <NavItem>About</NavItem>
             <NavItem>Service</NavItem>
             <NavItem>Gallery</NavItem>
             <NavItem>Blog</NavItem>
-            <ContactButton>Contact</ContactButton>
+            <ContactButton onClick={logout}>Contact</ContactButton>
         </NavbarList>
         <Menu src={active ? cross : hamburger} isActive={active} onClick={handleClick} />
     </NavbarContainer>
-
-
     </div>
     
   )

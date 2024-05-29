@@ -12,11 +12,15 @@ interface userObject {
 const userSignUpAPI = async (userInfo: userObject) => {
     try {
         const response = await axios.post(`${baseUrl}/signup`, userInfo);
+        // return { data: response.data, status: response.status };
         return response
-        
     } catch (error) {
-        console.log(error)
-        return
+        if (axios.isAxiosError(error) && error.response) {
+            console.log("error: ", error)
+            return { data: error.response.data, status: error.response.status };
+        } else {
+            return { data: { message: "Network error or server is unreachable" }, status: 500 };
+        }
     }
 }
 
@@ -25,8 +29,12 @@ const userSignInAPI = async (userInfo: {email: string, password: string}) => {
         const response = await axios.post(`${baseUrl}/signin`, userInfo);
         return response
     } catch (error) {
-        console.log(error)
-        return
+        if (axios.isAxiosError(error) && error.response) {
+            console.log("error: ", error)
+            return { data: error.response.data, status: error.response.status };
+        } else {
+            return { data: { message: "Network error or server is unreachable" }, status: 500 };
+        }
     }
 }
 

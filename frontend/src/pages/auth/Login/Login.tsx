@@ -1,31 +1,37 @@
-import {useState} from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { ThemeProvider } from '@mui/material/styles';
-import { userSignInAPI, userSignUpAPI } from '../api/AuthRequests';
-
-
+import React, { useState } from 'react';
+import { Avatar, Button, Checkbox, FormControlLabel, Box, ThemeProvider } from '@mui/material';
+import LockPersonIcon from '@mui/icons-material/LockPerson';
+import { userSignInAPI } from '../api/AuthRequests';
 import { CustomTextField, Title, CustomTheme } from '../components';
-
-interface userLoginObject {
-  email: string,
-  password: string
-}
-const userLogin = async (userInfo:userLoginObject) => {
-  const response = await userSignInAPI(userInfo);
-
-  // if (!response.ok) {
-  //   setError(data.error); 
-  // }
-}
+import { useNavigate } from 'react-router-dom';
+import { useAtom } from 'jotai';
+import { userAtom } from '../../../context/userAtom';
 
 
 export default function Login() {
-  const [error, setError] = useState("This is error")
+  const [user, setUser] = useAtom(userAtom)
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const navigateToTestPage = () => {
+    navigate('/test')
+  }
+  
+
+  const userLogin = async (userInfo: { email: string; password: string }) => {
+    const response = await userSignInAPI(userInfo);
+    console.log(response)
+    if (response.status !== 200) {
+      setError(response.data.error || "An unknown error occurred"); // Using a generic message if none is provided
+    } else {
+      setError(""); 
+      console.log("Sign in successfully");
+      localStorage.setItem('user', JSON.stringify(response.data));
+
+      setUser(response.data);
+
+      navigateToTestPage()
+    }
+  }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -35,17 +41,9 @@ export default function Login() {
       email: data.get('email') as string,
       password: data.get('password') as string,
     }
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-
     userLogin(userInfo);
 
   };
-
-
-
 
   return (
     <div className='h-screen w-full flex items-center justify-center content-center'>
@@ -53,7 +51,7 @@ export default function Login() {
         <div className=' w-3/4 my-10 flex flex-col items-center'>
           <ThemeProvider theme={CustomTheme} >
                 <Avatar sx={{ m: 1, bgcolor: '#FF64AE' }}>
-                  <LockOutlinedIcon sx={{color: 'white'}}/>
+                  <LockPersonIcon sx={{color: 'white'}}/>
                 </Avatar> 
 
                 <Title className='text-3xl'>Sign in</Title>
