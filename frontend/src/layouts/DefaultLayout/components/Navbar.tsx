@@ -14,7 +14,7 @@ const UserInfo = () => {
   
   return (
     <>
-    {user ? (<p>Welcome {user.first_name} {user.last_name}!</p>) : null}
+    {user.id !== -1 ? (<p>Welcome {user.first_name} {user.last_name}!</p>) : null}
     </>
   )
 }

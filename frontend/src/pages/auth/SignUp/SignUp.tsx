@@ -18,10 +18,35 @@ interface signUpInfoObject {
   last_name: string
 }
 export default function SignUp() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("")
+
+
+
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate()
-    
+
+
+  const validateEmail = (email: string) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setEmail(email);
+    setEmailError(re.test(email) ? "" : "Invalid email format");
+  };
+
+  // Password validation
+  const validatePassword = (password: string) => {
+    setPassword(password);
+    setPasswordError(password.length >= 6 ? "" : "Password must be at least 6 characters long");
+  };  
+  const validateConfirmPassword = (confirmPassword: string) => {
+    setConfirmPassword(confirmPassword)
+    setConfirmPasswordError(confirmPassword === password ? "" : "Passwords do not match")
+  }
 
   const userSignUp = async (signUpInfo: signUpInfoObject) => {
     const response = await userSignUpAPI(signUpInfo)
@@ -82,6 +107,11 @@ export default function SignUp() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                value={email}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => validateEmail(e.target.value)}
+                error={!!emailError}
+                helperText={emailError}
+                
                   />
                 <CustomTextField
                 name="password"
@@ -89,6 +119,10 @@ export default function SignUp() {
                 type={showPassword ? "text" : "password"}
                 id="password"
                 autoComplete="current-password"
+                value={password}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => validatePassword(e.target.value)}
+                error={!!passwordError}
+                helperText={passwordError}
                   />
                 <CustomTextField
                 name="confirm_password"
@@ -96,6 +130,10 @@ export default function SignUp() {
                 label="Confirm password"
                 id="confirm_password"
                 autoComplete="confirm-password"
+                value={confirmPassword}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => validateConfirmPassword(e.target.value)}
+                error={!!confirmPasswordError}
+                helperText={confirmPasswordError}
                   />
               
                 <FormControlLabel className='mt-2'
