@@ -5,15 +5,23 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
 import LockPersonIcon from '@mui/icons-material/LockPerson';
+
+import tw from 'twin.macro';
+import styled from 'styled-components';
+import Bg from '../../../assets/home1/slide-background.png'
+
 import { ThemeProvider } from '@mui/material/styles';
 import { CustomTextField, Title, CustomTheme } from '../components';
 import { useNavigate } from 'react-router-dom';
+
+import { useAtom } from 'jotai';
+import { LoginInfoAtom } from '../../../context/loginInfoAtom';
 
 import { userSignUpAPI } from '../api/AuthRequests';
 
 interface signUpInfoObject {
   email: string,
-  password: string,
+  password: string
   first_name: string,
   last_name: string
 }
@@ -24,6 +32,7 @@ export default function SignUp() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("")
+  const [login, setLogin] = useAtom(LoginInfoAtom);
 
 
 
@@ -40,8 +49,9 @@ export default function SignUp() {
 
   // Password validation
   const validatePassword = (password: string) => {
+    const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
     setPassword(password);
-    setPasswordError(password.length >= 6 ? "" : "Password must be at least 6 characters long");
+    setPasswordError(re.test(password) ? "" : "Password must be at least 8 characters long, with at least one uppercase character and one number");
   };  
   const validateConfirmPassword = (confirmPassword: string) => {
     setConfirmPassword(confirmPassword)
@@ -56,6 +66,8 @@ export default function SignUp() {
     } else{
       setError("");
       console.log("Sign up successfully")
+      
+      setLogin({email: email, password: password})
       navigate('/login')
     }
   }
@@ -81,6 +93,8 @@ export default function SignUp() {
 
   return (
     <div className='h-screen w-full flex items-center justify-center content-center'>
+      <img tw='absolute -z-10 top-0 left-0 max-w-[100vw] right-0' src={Bg} alt="" />
+
       <div className='flex w-1/2 rounded-3xl border shadow-md bg-white justify-center content-center'>
         <div className=' w-3/4 my-10 flex flex-col items-center'>
           <ThemeProvider theme={CustomTheme} >
@@ -88,7 +102,7 @@ export default function SignUp() {
                   <LockPersonIcon sx={{color: 'white'}}/>
                 </Avatar> 
                 <Title className='text-3xl'>Sign up</Title>
-                <a href="/login" className='text-2nd-color underline py-4'>Already got an account? Sign in here</a>
+                
               <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
                 <div className='flex flex-row gap-4'>
                 <CustomTextField
@@ -166,6 +180,7 @@ export default function SignUp() {
                   >
                   Sign up
                 </Button>
+                <a href="/login" className='text-2nd-color underline py-4 flex justify-center'>Already got an account? Sign in here</a>
 
                     
               </Box>

@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home1 from './pages/home1'
 import Home2 from './pages/home2'
 import Auth from "./pages/auth";
@@ -20,6 +20,7 @@ const App = () => {
             <Route path='/home2' element={<Home2 />} />
           </Route>
         </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
   )

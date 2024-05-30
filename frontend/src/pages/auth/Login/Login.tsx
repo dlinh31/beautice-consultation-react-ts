@@ -1,14 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Avatar, Button, Checkbox, FormControlLabel, Box, ThemeProvider } from '@mui/material';
 import LockPersonIcon from '@mui/icons-material/LockPerson';
 import { userSignInAPI } from '../api/AuthRequests';
 import { CustomTextField, Title, CustomTheme } from '../components';
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
+import { LoginInfoAtom } from '../../../context/loginInfoAtom';
+
+import tw from 'twin.macro';
+import styled from 'styled-components';
+
 import { userAtom } from '../../../context/userAtom';
+import Bg from '../../../assets/home1/slide-background.png'
 
 
 export default function Login() {
+  
+
+  const [login] = useAtom(LoginInfoAtom)
+  const [email, setEmail] = useState(login.email || "");
+  const [password, setPassword] = useState(login.password || "");
+  useEffect(() => {
+    localStorage.removeItem('user');
+  }, [])
+  
+  
+
   const [user, setUser] = useAtom(userAtom)
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -47,6 +64,7 @@ export default function Login() {
 
   return (
     <div className='h-screen w-full flex items-center justify-center content-center'>
+      <img tw='absolute -z-10 top-0 left-0 max-w-[100vw] right-0' src={Bg} alt="" />
       <div className='flex w-1/2 rounded-3xl border shadow-md bg-white justify-center content-center'>
         <div className=' w-3/4 my-10 flex flex-col items-center'>
           <ThemeProvider theme={CustomTheme} >
@@ -56,12 +74,14 @@ export default function Login() {
 
                 <Title className='text-3xl'>Sign in</Title>
   
-                <a href="/signup" className='text-2nd-color underline py-4'>New to Beautice? Sign up here</a>
+                
               <Box component="form" onSubmit={handleSubmit}  sx={{ mt: 1 }}>
                 <CustomTextField
                 id="email"
                 label="Email Address"
                 name="email"
+                value={email}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                 autoComplete="email"
                   />
                 <CustomTextField
@@ -69,6 +89,8 @@ export default function Login() {
                 label="Password"
                 type="password"
                 id="password"
+                value={password}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                 autoComplete="current-password"
                   />
               
@@ -103,7 +125,8 @@ export default function Login() {
                   >
                   Sign In
                 </Button>
-                <a href="/" className='text-2nd-color self-center justify-sel-center mt-10'>Forgot password?</a>
+                <a href="/" className='text-2nd-color self-center mt-2 flex justify-center'>Forgot password?</a>
+                <a href="/signup" className='text-2nd-color underline py-4 flex justify-center'>New to Beautice? Sign up here</a>
 
                     
               </Box>

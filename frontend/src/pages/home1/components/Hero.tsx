@@ -1,7 +1,7 @@
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
-import HeroImage from '../../../assets/home1/hero-image.svg';
+import HeroImage from '../../../assets/home1/hero-image.png';
 import BackgroundImage from '../../../assets/home1/slide-background.png'
 
 const Background = styled.img`
