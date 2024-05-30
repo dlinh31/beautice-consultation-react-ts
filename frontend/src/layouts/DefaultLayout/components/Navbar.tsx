@@ -1,11 +1,12 @@
 import {useState} from 'react';
 import tw from 'twin.macro';
 import styled from 'styled-components';
-import logo from '../../../assets/main-logo.svg'; 
-import hamburger from '../../../assets/navbar-hamburger.png';
-import cross from '../../../assets/navbar-cross.png';
+import logo from '../../../assets/home1/main-logo.svg'; 
+import hamburger from '../../../assets/home1/navbar-hamburger.png';
+import cross from '../../../assets/home1/navbar-cross.png';
 import { useAtom } from 'jotai';
 import { userAtom } from '../../../context/userAtom';
+import { NavbarAtom } from "../../../context/NavbarAtom"; // Adjust the path as needed
 import { defaultUser } from '../../../context/userAtom';
 import { useNavigate } from 'react-router-dom';
 
@@ -72,7 +73,7 @@ const Navbar = () => {
     setUser(defaultUser);
     navigate('/login');
   }
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useAtom(NavbarAtom)
   const handleClick = () => {
     console.log('active')
     setActive(!active)

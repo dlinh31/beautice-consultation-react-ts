@@ -1,9 +1,9 @@
 import {useState, useEffect} from 'react';
 import tw from 'twin.macro';
 import styled from 'styled-components';
-import logo from '../../../assets/footer-logo.svg';
-import socialIcons from '../../../assets/social-media-icons.png'
-import BgImage from '../../../assets/background-footer.png';
+import logo from '../../../assets/home1/footer-logo.svg';
+import socialIcons from '../../../assets/home1/social-media-icons.png'
+import BgImage from '../../../assets/home1/background-footer.png';
 
 // Styled components for the footer
 const FooterContainer = styled.footer`

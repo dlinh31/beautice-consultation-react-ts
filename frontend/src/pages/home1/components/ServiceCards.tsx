@@ -1,25 +1,11 @@
 import React from 'react'
 import tw from 'twin.macro';
 import styled from 'styled-components';
-import Image1 from '../../../assets/feature-card-1.svg'
-import Image2 from '../../../assets/feature-card-2.svg'
-import Image3 from '../../../assets/feature-card-3.svg'
-import BgImage from '../../../assets/slide-background-2.png'
+import Image1 from '../../../assets/home1/feature-card-1.svg'
+import Image2 from '../../../assets/home1/feature-card-2.svg'
+import Image3 from '../../../assets/home1/feature-card-3.svg'
+import BgImage from '../../../assets/home1/slide-background-2.png'
 
-const cardContent = [
-    {
-        image: Image1,
-        title: 'Beauty consultation',
-    },
-    {
-        image: Image2,
-        title: 'Skin treatments',
-    },
-    {
-        image: Image3,
-        title: 'Beauty product',
-    }
-]
 
 const Container = styled.div`
     ${tw`flex justify-between pt-0 gap-[3.5rem] mb-[8.6rem]
@@ -68,9 +54,21 @@ const ServiceCards = () => {
     <div>
 
     <Container>
-        {cardContent.map((card,index) => (
-            <Card key={index} image={card.image} title={card.title} />
-        ))}
+        <CardContainer>
+            <Image src={Image1} alt="Beauty consultation" />
+            <Subtitle>Beauty consultation</Subtitle>
+            <Text>Non parturient amet, feugiat tellus sagittis, scelerisque eget nulla turpis.</Text>
+        </CardContainer>
+        <CardContainer>
+            <Image src={Image2} alt="Skin treatments" />
+            <Subtitle>Skin treatments</Subtitle>
+            <Text>Non parturient amet, feugiat tellus sagittis, scelerisque eget nulla turpis.</Text>
+        </CardContainer>
+        <CardContainer>
+            <Image src={Image3} alt="Beauty product" />
+            <Subtitle>Beauty product</Subtitle>
+            <Text>Non parturient amet, feugiat tellus sagittis, scelerisque eget nulla turpis.</Text>
+        </CardContainer>
     </Container>
     <Bg src={BgImage} />
         </div>

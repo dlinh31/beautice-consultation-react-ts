@@ -1,8 +1,8 @@
-import React from 'react'
+
 import tw from 'twin.macro';
 import styled from 'styled-components';
-import PlayBtn from '../../../assets/play_btn.svg'
-import Img from '../../../assets/video-photo.jpeg'
+import PlayBtn from '../../../assets/home1/play_btn.svg'
+import Img from '../../../assets/home1/video-photo.jpeg'
 
 
 const Container = styled.div`

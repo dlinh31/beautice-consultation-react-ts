@@ -1,6 +1,12 @@
 import tw from 'twin.macro';
 import styled from 'styled-components';
-import HeroImage from '../../../assets/hero-image.svg';
+
+import HeroImage from '../../../assets/home1/hero-image.svg';
+import BackgroundImage from '../../../assets/home1/slide-background.png'
+
+const Background = styled.img`
+    ${tw`absolute -z-10 top-0 left-0 max-w-[100vw] right-0`}
+`
 
 
 const HeroContainer = styled.div`
@@ -45,7 +51,8 @@ const Image = styled.img`
 
 const Hero = () => {
   return (
-
+    <div>
+    <Background src={BackgroundImage} />
     <HeroContainer>
         <HeroContent>
         <Title>Clinic & beauty consultant</Title>
@@ -57,6 +64,7 @@ const Hero = () => {
         </ImageContainer>
     </HeroContainer>
 
+    </div>
       
   )
 }

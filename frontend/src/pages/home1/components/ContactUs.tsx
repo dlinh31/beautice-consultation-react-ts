@@ -1,6 +1,6 @@
 import tw from 'twin.macro'
 import styled from 'styled-components';
-import Img from '../../../assets/contact-image.svg';
+import Img from '../../../assets/home1/contact-image.svg';
 
 const Container = styled.div`
     ${tw`flex items-start justify-between

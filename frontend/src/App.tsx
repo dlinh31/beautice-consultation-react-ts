@@ -1,8 +1,9 @@
 import { Routes, Route } from "react-router-dom";
-import Home1 from './pages/home-1'
-import Home2 from './pages/home-2'
+import Home1 from './pages/home1'
+import Home2 from './pages/home2'
 import Auth from "./pages/auth";
 import DefaultLayout from './layouts/DefaultLayout/DefaultLayout'
+import SecondLayout from "./layouts/SecondLayout/SecondLayout";
 import RequireAuth from "./pages/auth/RequireAuth/RequireAuth";
 const App = () => {
 
@@ -15,8 +16,8 @@ const App = () => {
             <Route index element={<Home1 />} />
         </Route>
         <Route element={<RequireAuth />}>
-          <Route path='/' element={<DefaultLayout />}>
-            <Route path='/test' element={<Home2 />} />
+          <Route path='/' element={<SecondLayout />}>
+            <Route path='/home2' element={<Home2 />} />
           </Route>
         </Route>
       </Routes>

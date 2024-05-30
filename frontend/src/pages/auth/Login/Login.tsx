@@ -12,8 +12,8 @@ export default function Login() {
   const [user, setUser] = useAtom(userAtom)
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const navigateToTestPage = () => {
-    navigate('/test')
+  const navigateToHome2 = () => {
+    navigate('/home2')
   }
   
 
@@ -29,7 +29,7 @@ export default function Login() {
 
       setUser(response.data);
 
-      navigateToTestPage()
+      navigateToHome2()
     }
   }
 

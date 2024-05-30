@@ -1,13 +1,13 @@
 import tw from 'twin.macro';
 import styled from 'styled-components';
 
-import Expert1 from '../../../assets/expert-1.png';
-import Expert2 from '../../../assets/expert-2.png';
-import Expert3 from '../../../assets/expert-3.png';
-import Twitter from '../../../assets/Twitter.svg';
-import Facebook from '../../../assets/Facebook.svg';
-import Instagram from '../../../assets/Instagram.svg';
-import BgImage from '../../../assets/slide-background-3.png'
+import Expert1 from '../../../assets/home1/expert-1.png';
+import Expert2 from '../../../assets/home1/expert-2.png';
+import Expert3 from '../../../assets/home1/expert-3.png';
+import Twitter from '../../../assets/home1/Twitter.svg';
+import Facebook from '../../../assets/home1/Facebook.svg';
+import Instagram from '../../../assets/home1/Instagram.svg';
+import BgImage from '../../../assets/home1/slide-background-3.png'
 const cardContent = [
     {
         image: Expert1,

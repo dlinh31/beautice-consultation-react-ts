@@ -7,6 +7,7 @@ export default {
 
   theme: {
     screens: {
+      'max': {'min': '1440px'},
       'xl': {'max': '1440px'},
       // => @media (max-width: 1279px) { ... }
 
