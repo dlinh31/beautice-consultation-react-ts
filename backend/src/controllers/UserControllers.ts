@@ -2,7 +2,8 @@ import client from './ConnectDBControllers';
 import Joi from 'joi';
 import bcrypt from 'bcrypt'
 import {Request, Response} from 'express';
-import { generateToken } from './JWTControllers';
+import { generateToken, verifyToken } from './JWTControllers';
+import { JwtPayload } from 'jsonwebtoken';
 
 
 const userSchema = Joi.object({
@@ -81,7 +82,6 @@ const SignInUser = async (req: Request, res: Response) => {
       res.status(400).json({error: "Please enter all required fields."});
       return;
   }
-
   try {
     const userResult = await client.query('SELECT * FROM users WHERE email = $1 ;', [email]);
     if (userResult.rowCount === 0) {
@@ -103,4 +103,27 @@ const SignInUser = async (req: Request, res: Response) => {
   }
 };
 
-export {SignInUser, SignUpUser}
+const verifyJWT = async (req: Request, res: Response) => {
+  const {token} = req.body;
+  try{
+    const verification: JwtPayload = await verifyToken(token) as JwtPayload;
+    res.status(200).json({id:verification.id})
+  } catch (error){
+    res.status(400).json({error: error})
+  }
+}
+
+const fetchUserFromId = async (req: Request, res: Response) => {
+  const userId = req.params.id;
+  const userResult = await client.query('SELECT * FROM users WHERE id = $1 ;', [userId]);
+  if (userResult.rowCount === 0) {
+    res.status(404).json({error: "User not found."});
+    return;
+  }
+  const user = userResult.rows[0];
+  const {id, email, first_name, last_name} = user;
+  const userData =  {id, email, first_name, last_name}
+  res.status(200).json(userData)
+}
+
+export {SignInUser, SignUpUser, verifyJWT, fetchUserFromId}

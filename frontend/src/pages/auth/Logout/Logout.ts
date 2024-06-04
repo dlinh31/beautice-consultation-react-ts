@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom"
 
 const Logout =() => {
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    localStorage.removeItem('token')
 
 
 }

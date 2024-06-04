@@ -1,4 +1,4 @@
-import { atomWithStorage } from 'jotai/utils';
+import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 
 export interface User {
     id: number;
@@ -14,4 +14,7 @@ export const defaultUser: User = {
     email: '',
 };
 
-export const userAtom = atomWithStorage<User>('user', defaultUser);
+
+
+const storage = createJSONStorage(() => sessionStorage);
+export const userAtom = atomWithStorage<User>('user', defaultUser, storage)

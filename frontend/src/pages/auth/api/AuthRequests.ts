@@ -39,5 +39,34 @@ const userSignInAPI = async (userInfo: {email: string, password: string}) => {
     }
 }
 
-export {userSignUpAPI, userSignInAPI}
+const verifyToken = async(userToken: string) => {
+    try{
+        const response = await axios.post(`${baseUrl}/verifyToken`, {token: userToken});
+        return response
+    } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+            console.log("error: ", error)
+            return { data: error.response.data, status: error.response.status };
+        } else {
+            return { data: { message: "Network error or server is unreachable" }, status: 500 };
+        }
+    }
+}
+
+const getUserFromId = async(userId: number) => {
+    try {
+        const response = await axios.get(`${baseUrl}/getUser/${userId}` );
+        return response
+    } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+            console.log("error: ", error)
+            return { data: error.response.data, status: error.response.status };
+        } else {
+            return { data: { message: "Network error or server is unreachable" }, status: 500 };
+        }
+    }
+}
+
+
+export {userSignUpAPI, userSignInAPI, verifyToken, getUserFromId}
 

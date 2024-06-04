@@ -18,13 +18,21 @@ import Bg from '../../../assets/home1/slide-background.png'
 export default function Login() {
   const [login] = useAtom(LoginInfoAtom);
   const [email, setEmail] = useState(login.email || "");
+  const [rememberMe, setRememberMe] = useState(false);
   const [password, setPassword] = useState(login.password || "");
-  const [user, setUser] = useAtom(userAtom);
+  const [, setUser] = useAtom(userAtom);
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const navigateToHome2 = () => {
     navigate('/home2')
   }
+  useEffect(() => {
+    const currentToken = localStorage.getItem('token')
+    if (currentToken){
+      navigate('/home2')
+  }
+  }, [])
+  
 
   const userLogin = async (userInfo: { email: string; password: string }) => {
     const loginPromise = userSignInAPI(userInfo)
@@ -37,8 +45,11 @@ export default function Login() {
       console.log("Sign in successfully");
       const { id, email, first_name, last_name, token } = response.data;
       const userData = { id, email, first_name, last_name };
-  
-      localStorage.setItem('token', token);
+      
+      if (rememberMe){
+        localStorage.setItem('token', token);
+      }
+      
       const userContext: User = userData;
       
       setUser(userContext);
@@ -101,13 +112,15 @@ export default function Login() {
                   />
               
                 <FormControlLabel className='mt-2'
-                  control={<Checkbox value="remember" color="primary"
+                  control={<Checkbox value="remember" color="primary" 
                 sx={{
                   '&.Mui-checked	': {
                     color: '#FF4081',
                     opacity: [0.9, 0.8, 0.7],
                   }
                 }}
+                  checked={rememberMe}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRememberMe(e.target.checked)}
                   />}
                   label="Remember me"
                   

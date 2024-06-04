@@ -57,8 +57,9 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const Logout = () => {
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    localStorage.removeItem('token')
     navigate('/login')
   }
 

@@ -20,6 +20,7 @@ const userAuth = async (req: Request, res: Response, next: NextFunction) => {
         console.log(error);
         res.status(401).json({error: "Unauthorized Request"})
     }
+    return
 };
 
 export default userAuth;
