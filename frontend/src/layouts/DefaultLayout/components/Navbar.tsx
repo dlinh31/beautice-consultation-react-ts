@@ -6,13 +6,11 @@ import hamburger from '../../../assets/home1/navbar-hamburger.png';
 import cross from '../../../assets/home1/navbar-cross.png';
 import { useAtom } from 'jotai';
 import { userAtom } from '../../../context/userAtom';
-import { NavbarAtom } from "../../../context/NavbarAtom"; // Adjust the path as needed
-import { defaultUser } from '../../../context/userAtom';
+import { NavbarAtom } from "../../../context/NavbarAtom";
 import { useNavigate } from 'react-router-dom';
 
 const UserInfo = () => {
   const [user] = useAtom(userAtom);
-  
   return (
     <>
     {user.id !== -1 ? (<p>Welcome {user.first_name} {user.last_name}!</p>) : null}
@@ -65,14 +63,15 @@ const Menu = styled.img.withConfig({
 `;
 
 
-
 const Navbar = () => {
   const [user, setUser] = useAtom(userAtom);
   const navigate = useNavigate();
-  const logout = () => {
-    setUser(defaultUser);
-    navigate('/login');
+  const Logout = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    navigate('/login')
   }
+
   const [active, setActive] = useAtom(NavbarAtom)
   const handleClick = () => {
     console.log('active')
@@ -90,7 +89,7 @@ const Navbar = () => {
             <NavItem>Service</NavItem>
             <NavItem>Gallery</NavItem>
             <NavItem>Blog</NavItem>
-            <ContactButton onClick={logout}>Contact</ContactButton>
+            <ContactButton onClick={Logout}>Contact</ContactButton>
         </NavbarList>
         <Menu src={active ? cross : hamburger} isActive={active} onClick={handleClick} />
     </NavbarContainer>

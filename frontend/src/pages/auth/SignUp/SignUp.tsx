@@ -5,7 +5,6 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
 import LockPersonIcon from '@mui/icons-material/LockPerson';
-
 import tw from 'twin.macro';
 import styled from 'styled-components';
 import Bg from '../../../assets/home1/slide-background.png'
@@ -13,6 +12,8 @@ import Bg from '../../../assets/home1/slide-background.png'
 import { ThemeProvider } from '@mui/material/styles';
 import { CustomTextField, Title, CustomTheme } from '../components';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { useAtom } from 'jotai';
 import { LoginInfoAtom } from '../../../context/loginInfoAtom';
@@ -33,9 +34,6 @@ export default function SignUp() {
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("")
   const [login, setLogin] = useAtom(LoginInfoAtom);
-
-
-
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate()
@@ -47,29 +45,45 @@ export default function SignUp() {
     setEmailError(re.test(email) ? "" : "Invalid email format");
   };
 
-  // Password validation
   const validatePassword = (password: string) => {
     const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
     setPassword(password);
     setPasswordError(re.test(password) ? "" : "Password must be at least 8 characters long, with at least one uppercase character and one number");
   };  
+  
   const validateConfirmPassword = (confirmPassword: string) => {
     setConfirmPassword(confirmPassword)
     setConfirmPasswordError(confirmPassword === password ? "" : "Passwords do not match")
   }
 
+
+
+
   const userSignUp = async (signUpInfo: signUpInfoObject) => {
-    const response = await userSignUpAPI(signUpInfo)
-    console.log(response)
-    if (response.status !== 200){
-      setError(response.data.error || "An unknown error occurred")
-    } else{
-      setError("");
-      console.log("Sign up successfully")
-      
-      setLogin({email: email, password: password})
-      navigate('/login')
-    }
+    const signUpPromise = userSignUpAPI(signUpInfo)
+    .then((response) => {
+      if(response.status !== 200){
+        setError(response.data.error || "An unknown error occurred")
+        throw new Error(response.data.error || "An unknown error occurred");
+      } else {
+        setError("");
+        console.log("Sign up successfully")
+        setLogin({email: email, password: password});
+      }
+      return response;
+    })
+    .then(() => {setTimeout( () => navigate('/login'), 1500)});
+    toast.promise(
+      signUpPromise,
+      {
+        pending: 'Signing up...',
+        success: {
+          render: 'Signed up successfully',
+          autoClose: 1500,
+        },
+      }
+    );
+
   }
 
 
@@ -93,6 +107,7 @@ export default function SignUp() {
 
   return (
     <div className='h-screen w-full flex items-center justify-center content-center'>
+      <ToastContainer />
       <img tw='absolute -z-10 top-0 left-0 max-w-[100vw] right-0' src={Bg} alt="" />
 
       <div className='flex w-1/2 rounded-3xl border shadow-md bg-white justify-center content-center'>

@@ -6,5 +6,10 @@ const generateToken = (id: string) => {
     return token
   }
 
+const verifyToken = (token: string) => {
+  const decoded = jwt.verify(token, 'secret-for-now');
+  return decoded
+}
+
+
 export {generateToken}
-  

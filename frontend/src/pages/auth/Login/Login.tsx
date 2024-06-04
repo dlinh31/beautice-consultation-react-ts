@@ -6,48 +6,57 @@ import { CustomTextField, Title, CustomTheme } from '../components';
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { LoginInfoAtom } from '../../../context/loginInfoAtom';
-
 import tw from 'twin.macro';
 import styled from 'styled-components';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-import { userAtom } from '../../../context/userAtom';
+import { userAtom, User } from '../../../context/userAtom';
 import Bg from '../../../assets/home1/slide-background.png'
 
 
 export default function Login() {
-  
-
-  const [login] = useAtom(LoginInfoAtom)
+  const [login] = useAtom(LoginInfoAtom);
   const [email, setEmail] = useState(login.email || "");
   const [password, setPassword] = useState(login.password || "");
-  useEffect(() => {
-    localStorage.removeItem('user');
-  }, [])
-  
-  
-
-  const [user, setUser] = useAtom(userAtom)
+  const [user, setUser] = useAtom(userAtom);
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const navigateToHome2 = () => {
     navigate('/home2')
   }
-  
 
   const userLogin = async (userInfo: { email: string; password: string }) => {
-    const response = await userSignInAPI(userInfo);
-    console.log(response)
-    if (response.status !== 200) {
-      setError(response.data.error || "An unknown error occurred"); // Using a generic message if none is provided
-    } else {
-      setError(""); 
+    const loginPromise = userSignInAPI(userInfo)
+    .then((response) => {
+      if (response.status !== 200) {
+        throw new Error(response.data.error || "An unknown error occurred");
+      }
       console.log("Sign in successfully");
-      localStorage.setItem('user', JSON.stringify(response.data));
-
-      setUser(response.data);
-
-      navigateToHome2()
-    }
+      const { id, email, first_name, last_name, token } = response.data;
+      const userData = { id, email, first_name, last_name };
+  
+      localStorage.setItem('token', token);
+      const userContext: User = userData;
+      
+      setUser(userContext);
+      return response;
+    })
+    .then(() => { setTimeout(() => navigateToHome2(), 1500)})
+  
+    toast.promise(
+      
+      loginPromise,
+      {
+        
+        pending: 'Logging in...',
+        success: {
+          render: 'Logged in successfully',
+          autoClose: 1500,
+        },
+        error: "An unknown error occurred",
+      }
+    );
   }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -64,6 +73,7 @@ export default function Login() {
 
   return (
     <div className='h-screen w-full flex items-center justify-center content-center'>
+    <ToastContainer />
       <img tw='absolute -z-10 top-0 left-0 max-w-[100vw] right-0' src={Bg} alt="" />
       <div className='flex w-1/2 rounded-3xl border shadow-md bg-white justify-center content-center'>
         <div className=' w-3/4 my-10 flex flex-col items-center'>
@@ -71,10 +81,7 @@ export default function Login() {
                 <Avatar sx={{ m: 1, bgcolor: '#FF64AE' }}>
                   <LockPersonIcon sx={{color: 'white'}}/>
                 </Avatar> 
-
                 <Title className='text-3xl'>Sign in</Title>
-  
-                
               <Box component="form" onSubmit={handleSubmit}  sx={{ mt: 1 }}>
                 <CustomTextField
                 id="email"
@@ -121,14 +128,9 @@ export default function Login() {
                     bgcolor: '#FF4081',
                     opacity: [0.9, 0.8, 0.7],
                   }
-                  }}
-                  >
-                  Sign In
-                </Button>
+                  }}> Sign In </Button>
                 <a href="/" className='text-2nd-color self-center mt-2 flex justify-center'>Forgot password?</a>
                 <a href="/signup" className='text-2nd-color underline py-4 flex justify-center'>New to Beautice? Sign up here</a>
-
-                    
               </Box>
 
         </ThemeProvider>
@@ -137,3 +139,4 @@ export default function Login() {
     </div>
   );
 }
+
