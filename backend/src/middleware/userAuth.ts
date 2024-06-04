@@ -10,7 +10,8 @@ const userAuth = async (req: Request, res: Response, next: NextFunction) => {
     }
     const token = authorization.split(' ')[1];
     try {
-        const { id } = jwt.verify(token, 'secret-for-now')
+        const jwt_key = process.env.JWT_SECRET_KEY
+        const { id } = jwt.verify(token, jwt_key)
         const result = await client.query("SELECT * FROM users WHERE id = ?", [id])
         if (result.rowCount == 1){
             next()

@@ -31,3 +31,7 @@
     }
 
 }
+
+.Toastify__progress-bar {
+    background: #FF64AE; /* Green progress bar */
+}

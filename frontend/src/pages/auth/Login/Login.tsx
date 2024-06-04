@@ -30,7 +30,9 @@ export default function Login() {
     const loginPromise = userSignInAPI(userInfo)
     .then((response) => {
       if (response.status !== 200) {
+        setError(response.data.error)
         throw new Error(response.data.error || "An unknown error occurred");
+        
       }
       console.log("Sign in successfully");
       const { id, email, first_name, last_name, token } = response.data;
@@ -45,16 +47,13 @@ export default function Login() {
     .then(() => { setTimeout(() => navigateToHome2(), 1500)})
   
     toast.promise(
-      
       loginPromise,
       {
-        
         pending: 'Logging in...',
         success: {
           render: 'Logged in successfully',
           autoClose: 1500,
         },
-        error: "An unknown error occurred",
       }
     );
   }

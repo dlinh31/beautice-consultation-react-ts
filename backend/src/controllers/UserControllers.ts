@@ -40,7 +40,6 @@ const findExistingEmail = async (email: string) => {
 const SignUpUser = async (req: Request, res: Response) => {
   const { email, password, first_name, last_name } = req.body;
 
-  // Check if all required fields are provided
   if (!email || !password || !first_name || !last_name) {
       res.status(400).json({ error: "Please enter all required fields" });
       return;

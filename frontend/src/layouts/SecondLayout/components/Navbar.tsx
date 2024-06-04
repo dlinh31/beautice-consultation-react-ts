@@ -1,6 +1,9 @@
+import {useState} from 'react'
+import { useNavigate } from 'react-router-dom';
+
 import tw from "twin.macro";
 import styled from "styled-components";
-import {useState} from 'react'
+
 import Logo from '../../../assets/home2/logo.svg'
 import Button from "../../../components/Button";
 import BgImage from '../../../assets/home2/home2-bg1.jpg'
@@ -8,6 +11,7 @@ import hamburger from '../../../assets/home1/navbar-hamburger.png';
 import cross from '../../../assets/home1/navbar-cross.png';
 import Background from "../../../components/Background";
 import { useAtom } from "jotai";
+import { userAtom } from '../../../context/userAtom';
 import { NavbarAtom } from "../../../context/NavbarAtom"; // Adjust the path as needed
 
 
@@ -41,9 +45,22 @@ const BgContainer = styled.div`
     `}
 `
 
-
+const UserInfo = () => {
+  const [user] = useAtom(userAtom);
+  return (
+    <>{user.id !== -1 ? (<p className='text-white'> Welcome {user.first_name} {user.last_name}!</p>) : null}</>
+  )
+}
 const Navbar = () => {
   const [active, setActive] = useAtom(NavbarAtom);
+  const [user, setUser] = useAtom(userAtom)
+  const navigate = useNavigate();
+
+  const Logout = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    navigate('/login')
+  }
 
   const handleClick = () => {
     console.log('active')
@@ -60,12 +77,13 @@ const Navbar = () => {
       <p tw='ml-[1.125rem] leading-[2.25rem] tracking-[2.5px] text-[1.5rem] text-[rgba(255, 255, 255, 1)]'>Beautice</p>
       </div>
       <NavbarList isActive={active}>
-        <NavItem tw='font-semibold text-[rgba(255, 255, 255, 1)]'>Home +</NavItem>
+        <UserInfo />
+        {user.id == -1 && <NavItem tw='font-semibold text-[rgba(255, 255, 255, 1)]'>Home +</NavItem>}
         <NavItem tw="text-[rgba(216, 220, 255, 1)]">About</NavItem>
         <NavItem tw="text-[rgba(216, 220, 255, 1)]">Service</NavItem>
         <NavItem tw="text-[rgba(216, 220, 255, 1)]">Gallery</NavItem>
         <NavItem tw="text-[rgba(216, 220, 255, 1)]">Blog</NavItem>
-        <Button tw="text-[rgba(216, 220, 255, 1)] p-[14px 40px] mr-[-2px]">Contact</Button>
+        <Button tw="text-[rgba(216, 220, 255, 1)] p-[14px 40px] mr-[-2px]" onClick={Logout}>Contact</Button>
       </NavbarList>
       <Menu src={active ? cross : hamburger} isActive={active} onClick={handleClick} />
 

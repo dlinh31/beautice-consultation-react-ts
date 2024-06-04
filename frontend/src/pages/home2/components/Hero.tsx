@@ -18,10 +18,9 @@ const Hero = () => {
         <button tw='text-white font-semibold border border-[1px solid rgba(255, 255, 255, 1)] rounded-[15px] mt-[41px] p-[12px 29px]'>More Details</button>
         </div>
         <div tw='flex flex-row items-center mr-[143px] mt-[76px]
-        lg:(mt-[3rem] mr-0)
-        '>
-          <img tw='w-[166px] h-auto mr-[26px]' src={Btn} alt="" />
-          <p tw='text-white font-semibold '>Tour Video</p>
+        lg:(mt-[3rem] mr-0)'>
+          <img tw='w-[166px] h-auto mr-[26px] cursor-pointer' src={Btn} alt="" />
+          <p tw='text-white font-semibold cursor-pointer'>Tour Video</p>
           
         </div>
     </div>

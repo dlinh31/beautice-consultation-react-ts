@@ -1,4 +1,6 @@
 import {useState} from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -8,16 +10,13 @@ import LockPersonIcon from '@mui/icons-material/LockPerson';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 import Bg from '../../../assets/home1/slide-background.png'
-
 import { ThemeProvider } from '@mui/material/styles';
 import { CustomTextField, Title, CustomTheme } from '../components';
-import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { useAtom } from 'jotai';
 import { LoginInfoAtom } from '../../../context/loginInfoAtom';
-
 import { userSignUpAPI } from '../api/AuthRequests';
 
 interface signUpInfoObject {
