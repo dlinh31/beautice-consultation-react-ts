@@ -1,7 +1,7 @@
-import 'dotenv/config'
+
 import jwt from 'jsonwebtoken'
-
-
+import dotenv from 'dotenv'
+dotenv.config({ path: '../../.env' });
 const jwtSecret = process.env.JWT_SECRET_KEY || 'secret-for-now'
 
 const generateToken = (id: string) => {

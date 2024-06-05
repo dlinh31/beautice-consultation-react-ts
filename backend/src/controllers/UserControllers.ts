@@ -1,7 +1,7 @@
 import client from './ConnectDBControllers';
 import Joi from 'joi';
-import bcrypt from 'bcrypt'
 import {Request, Response} from 'express';
+import bcrypt from 'bcrypt'
 import { generateToken, verifyToken } from './JWTControllers';
 import { JwtPayload } from 'jsonwebtoken';
 
@@ -30,7 +30,7 @@ const validateUser = async(userData: userObject) => {
 
 const findExistingEmail = async (email: string) => {
     try {
-        const result = await client.query(`SELECT * FROM users WHERE email='${email}';`);
+        const result = await client.query(`SELECT * FROM users WHERE email= $1;`, [email]);
         return result.rows.length > 0;
       } catch (err) {
         console.error('Error executing query', (err as Error).stack); 
@@ -125,5 +125,16 @@ const fetchUserFromId = async (req: Request, res: Response) => {
   const userData =  {id, email, first_name, last_name}
   res.status(200).json(userData)
 }
+
+
+const fetchAllUsers = async () => {
+  const userResult = await client.query('SELECT * FROM beautice.users;');
+  console.log(userResult.rows)
+  if (userResult.rowCount === 0) {
+    return;
+  }
+}
+
+
 
 export {SignInUser, SignUpUser, verifyJWT, fetchUserFromId}

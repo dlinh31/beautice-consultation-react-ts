@@ -2,7 +2,7 @@ import {
     SignUpUser, SignInUser, verifyJWT, fetchUserFromId
 } from '../controllers/UserControllers';
 
-const express = require('express')
+import express from 'express';
 const router = express.Router()
 
 router.post('/signup', SignUpUser)
