@@ -114,16 +114,21 @@ const verifyJWT = async (req: Request, res: Response) => {
 }
 
 const fetchUserFromId = async (req: Request, res: Response) => {
-  const userId = req.params.id;
-  const userResult = await client.query('SELECT * FROM users WHERE id = $1 ;', [userId]);
-  if (userResult.rowCount === 0) {
-    res.status(404).json({error: "User not found."});
-    return;
+  try {
+    const userId = req.params.id;
+    const userResult = await client.query('SELECT * FROM users WHERE id = $1 ;', [userId]);
+    if (userResult.rowCount === 0) {
+      res.status(404).json({error: "User not found."});
+      return;
+    }
+    const user = userResult.rows[0];
+    const {id, email, first_name, last_name} = user;
+    const userData =  {id, email, first_name, last_name}
+    res.status(200).json(userData)
+  } catch(error){
+    res.status(400).json(error)
   }
-  const user = userResult.rows[0];
-  const {id, email, first_name, last_name} = user;
-  const userData =  {id, email, first_name, last_name}
-  res.status(200).json(userData)
+  
 }
 
 

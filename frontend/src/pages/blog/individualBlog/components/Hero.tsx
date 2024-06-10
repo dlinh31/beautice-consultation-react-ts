@@ -42,7 +42,7 @@ const Hero = () => {
         setUserPost(res.data.first_name + ' ' + res.data.last_name)
       }
     };
-    if (post) {
+    if (post && post.user_id) {
       fetchUser();
     }
   }, [post]);

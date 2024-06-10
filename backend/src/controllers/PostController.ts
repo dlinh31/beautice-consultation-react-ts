@@ -6,6 +6,8 @@ import {Request, Response} from 'express';
 
 const postSchema = Joi.object({
     user_id: Joi.number().required(),
+    title: Joi.string().max(30),
+    tag: Joi.string().max(30),
     text_content: Joi.string().max(200),
     post_date: Joi.date().timestamp('unix').required(),
     image_url: Joi.string(),
@@ -15,6 +17,8 @@ const postSchema = Joi.object({
 
 interface postObject {
     user_id: number,
+    title: string,
+    tag:string,
     text_content: string,
     post_date: Date,
     image_url: string,
@@ -23,6 +27,8 @@ interface postObject {
 
 const samplePost: postObject = {
     user_id: 1,
+    title: "Sample title",
+    tag: "beauty",
     text_content: "This will be a sample description for a post that will be displayed on the website",
     post_date: new Date(),
     image_url: "https://www.shutterstock.com/shutterstock/videos/1056585617/thumb/1.jpg?ip=x480",
@@ -38,7 +44,7 @@ const validatePost = async (postData: postObject) => {
 
 const getAllPosts = async (req: Request, res: Response) => {
     try {
-        const result = await client.query('SELECT * FROM beautice.posts ORDER BY post_date DESC;')
+        const result = await client.query('SELECT * FROM beautice.posts ORDER BY post_id DESC;')
         res.status(200).json(result.rows)
     } catch (error){
         res.status(400).json({error: error})
@@ -57,14 +63,20 @@ const getPostsFromUser = async (userId: number) => {
     }
 }
 
-const createPost = async (postData: postObject) => {
-    const {user_id, text_content, post_date, image_url, like_count} = postData;
+const createPost = async (req: Request, res: Response) => {
+    const postData:postObject = req.body.postData
+    const {user_id, title, tag, text_content, post_date, image_url, like_count} = postData;
     try {
-        const result = await client.query(`INSERT INTO beautice.posts (user_id, text_content, post_date, image_url, like_count)
-        VALUES ($1, $2, $3, $4, $5)
-        `, [user_id, text_content, post_date, image_url, like_count])
+        const result = await client.query(`INSERT INTO beautice.posts (user_id, title, tag, text_content, post_date, image_url, like_count)
+        VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING post_id, user_id, title, tag, text_content, post_date, image_url, like_count
+        `, [user_id, title, tag, text_content, post_date, image_url, like_count])
+        if (result.rowCount === 1){
+            res.status(200).json(result.rows[0])
+        } else{
+            res.status(400).json({error: "Internal server error at create post"})
+        }
     } catch (error) {
-        console.error(error)
+        res.status(400).json({error: error})
     }
 }
 
@@ -113,5 +125,21 @@ const editPost = async (post_id: number, updateData: { text_content?: string, im
 }
 
 
+const fetchPostById = async (req: Request, res: Response) => {
+    const postId = req.params.postId;
+    try {
+        const result = await client.query('SELECT * FROM beautice.posts WHERE post_id = $1', [postId])
+        if (result.rowCount === 1){
+            res.status(200).json(result.rows[0])
+        } else{
+            res.status(400).json({error: "Cannot get post with given ID"})
+        }
+    } catch (error) {
+        res.status(400).json({error: error})
+    }
+}
 
-export {postObject, samplePost, getAllPosts, getPostsFromUser, createPost, deletePost, editPost}
+
+
+
+export {postObject, samplePost, getAllPosts, getPostsFromUser, createPost, deletePost, editPost, fetchPostById}

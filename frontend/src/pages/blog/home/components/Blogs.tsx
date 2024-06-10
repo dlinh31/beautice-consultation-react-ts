@@ -72,7 +72,7 @@ const Blogs = () => {
         window.scrollTo({ top: 520, behavior: 'smooth' })
     };
 
-    const Modal = ({ onClose, onSubmitPost } : {onClose: any, onSubmitPost?:any}) => {
+    const Modal = () => {
         const [file, setFile] = useState(null); // State to hold the uploaded file
 
         const handleFileChange = (event:any) => {
@@ -178,7 +178,7 @@ const Blogs = () => {
                                 <Subtitle tw='text-1st-color font-normal'>Create post</Subtitle>
                                 <img src={createPostIcon} tw='h-[25px] w-[25px]' />
                             </button>
-                            {isModalOpen && <Modal  onClose={closeModal}></Modal>}
+                            {isModalOpen && <Modal ></Modal>}
                         </div>
                         
                     </div>
