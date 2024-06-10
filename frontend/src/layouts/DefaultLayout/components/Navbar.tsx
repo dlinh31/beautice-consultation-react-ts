@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 const UserInfo = () => {
   const [user] = useAtom(userAtom);
   return (
-    <>{user.id !== -1 ? (<p className='text-[#091156]'> Welcome {user.first_name} {user.last_name}!</p>) : null}</>
+    <>{user.user_id !== -1 ? (<p className='text-[#091156]'> Welcome {user.first_name} {user.last_name}!</p>) : null}</>
   )
 }
 
@@ -83,11 +83,11 @@ const Navbar = () => {
         <Logo src={logo} alt="Main Logo" />
         <NavbarList isActive={active}>
             <UserInfo />
-            {user.id == -1 && <NavItem className='text-[#091156]'>Home +</NavItem>}
+            {user.user_id == -1 && <NavItem className='text-[#091156]'>Home +</NavItem>}
             <NavItem>About</NavItem>
             <NavItem>Service</NavItem>
             <NavItem>Gallery</NavItem>
-            <NavItem>Blog</NavItem>
+            <NavItem><a href="/blog">Blog</a></NavItem>
             <ContactButton onClick={Logout}>Contact</ContactButton>
         </NavbarList>
         <Menu src={active ? cross : hamburger} isActive={active} onClick={handleClick} />

@@ -48,7 +48,7 @@ const BgContainer = styled.div`
 const UserInfo = () => {
   const [user] = useAtom(userAtom);
   return (
-    <>{user.id !== -1 ? (<p className='text-white'> Welcome {user.first_name} {user.last_name}!</p>) : null}</>
+    <>{user.user_id !== -1 ? (<p className='text-white'> Welcome {user.first_name} {user.last_name}!</p>) : null}</>
   )
 }
 const Navbar = () => {
@@ -70,30 +70,28 @@ const Navbar = () => {
 
   return (
     <div tw="">
+      <div tw="flex justify-between items-center mt-[2.5rem] mr-[0.125rem] pt-0  lg:(p-[1rem 4rem] mt-[1rem]) md:(p-[1rem 2rem]) sm:(p-[1rem])">
+        <div tw="flex flex-row items-center justify-center">
 
-    <div tw="flex justify-between items-center mt-[2.5rem] mr-[0.125rem] pt-0  lg:(p-[1rem 4rem] mt-[1rem]) md:(p-[1rem 2rem]) sm:(p-[1rem])">
-      <div tw="flex flex-row items-center justify-center">
+        <img tw='my-0 w-[4.9375rem] self-center z-30' src={Logo} alt="logo" />
+        <p tw='ml-[1.125rem] leading-[2.25rem] tracking-[2.5px] text-[1.5rem] text-[rgba(255, 255, 255, 1)]'>Beautice</p>
+        </div>
+        <NavbarList isActive={active}>
+          <UserInfo />
+          {user.user_id == -1 && <NavItem tw='font-semibold text-[rgba(255, 255, 255, 1)]'>Home +</NavItem>}
+          <NavItem tw="text-[rgba(216, 220, 255, 1)]">About</NavItem>
+          <NavItem tw="text-[rgba(216, 220, 255, 1)]">Service</NavItem>
+          <NavItem tw="text-[rgba(216, 220, 255, 1)]">Gallery</NavItem>
+          <NavItem tw="text-[rgba(216, 220, 255, 1)]"><a href="/blog">Blog</a></NavItem>
+          <Button tw="text-[rgba(216, 220, 255, 1)] p-[14px 40px] mr-[-2px]" onClick={Logout}>Contact</Button>
+        </NavbarList>
+        <Menu src={active ? cross : hamburger} isActive={active} onClick={handleClick} />
 
-      <img tw='my-0 w-[4.9375rem] self-center z-30' src={Logo} alt="logo" />
-      <p tw='ml-[1.125rem] leading-[2.25rem] tracking-[2.5px] text-[1.5rem] text-[rgba(255, 255, 255, 1)]'>Beautice</p>
       </div>
-      <NavbarList isActive={active}>
-        <UserInfo />
-        {user.id == -1 && <NavItem tw='font-semibold text-[rgba(255, 255, 255, 1)]'>Home +</NavItem>}
-        <NavItem tw="text-[rgba(216, 220, 255, 1)]">About</NavItem>
-        <NavItem tw="text-[rgba(216, 220, 255, 1)]">Service</NavItem>
-        <NavItem tw="text-[rgba(216, 220, 255, 1)]">Gallery</NavItem>
-        <NavItem tw="text-[rgba(216, 220, 255, 1)]">Blog</NavItem>
-        <Button tw="text-[rgba(216, 220, 255, 1)] p-[14px 40px] mr-[-2px]" onClick={Logout}>Contact</Button>
-      </NavbarList>
-      <Menu src={active ? cross : hamburger} isActive={active} onClick={handleClick} />
-
-    </div>
-    <BgContainer>
-      <Background src={BgImage} tw="top-0 left-0 
-      xl:(max-w-[1500px])
-      max:(w-full h-auto) 
-    " />
+      <BgContainer>
+        <Background src={BgImage} tw="top-0 left-0 
+        xl:(max-w-[1500px])
+        max:(w-full h-auto) " />
       </BgContainer>
     </div>
   )

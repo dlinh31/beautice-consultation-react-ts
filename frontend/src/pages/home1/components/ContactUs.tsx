@@ -90,7 +90,7 @@ const ContactUs = () => {
         <ContentContainer>
             <Subtitle>Contact Us</Subtitle>
             <Title>Send your inquiry to our expert team</Title>
-            <Text css={[]}>Lorem ipsum dolor sit amet nulla turapis tellus.</Text>
+            <Text>Lorem ipsum dolor sit amet nulla turapis tellus.</Text>
             <InquiryContainer>
                 <ShortInputContainer>
                     <InputFirstName type='text' placeholder='First name' />

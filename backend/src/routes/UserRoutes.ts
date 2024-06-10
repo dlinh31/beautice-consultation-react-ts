@@ -8,5 +8,5 @@ const router = express.Router()
 router.post('/signup', SignUpUser)
 router.post('/signin', SignInUser)
 router.post('/verifyToken', verifyJWT)
-router.get('/getUser/:id', fetchUserFromId)
+router.get('/getUser/:userId', fetchUserFromId)
 export {router};

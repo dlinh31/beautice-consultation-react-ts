@@ -7,11 +7,18 @@ import { getUserFromId } from "../api/AuthRequests";
 
 const verifyJWT = async () => {
     const userToken = localStorage.getItem('token') || '';
-    const verification = await verifyToken(userToken);
+    try {
+        const verification = await verifyToken(userToken);
+        console.log(verification)
     if (verification.status === 200){
         return verification.data;
     }
     return false;
+    } catch (error){
+        console.log("error at RequireAuth")
+        return false;
+    }
+    
 }
 
 const RequireAuth = () => {
@@ -22,7 +29,7 @@ const RequireAuth = () => {
         const asyncVerify = async() => {
             const verification = await verifyJWT();
             if(verification){
-                const userInfo = await getUserFromId(verification.id);
+                const userInfo = await getUserFromId(verification.user_id);
                 setIsVerified(true);
                 setUser(userInfo.data);
             }
@@ -30,7 +37,7 @@ const RequireAuth = () => {
         asyncVerify();
     }, []);
 
-    if ((!user.id || user.id === -1) && !isVerified){
+    if ((!user.user_id || user.user_id === -1) && !isVerified){
         return <Navigate to='/login' replace/>
     }
 

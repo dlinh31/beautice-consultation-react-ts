@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-const baseUrl = import.meta.env.VITE_BASE_URL || "http://localhost:3001";
+const baseUrl = import.meta.env.VITE_BASE_URL_USER || "http://localhost:3001/user";
 
 interface userObject {
     email: string,
@@ -20,6 +20,7 @@ const userSignUpAPI = async (userInfo: userObject) => {
             console.log("error: ", error)
             return { data: error.response.data, status: error.response.status };
         } else {
+            console.log(error)
             return { data: { message: "Network error or server is unreachable" }, status: 500 };
         }
     }
@@ -45,10 +46,9 @@ const verifyToken = async(userToken: string) => {
         return response
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
-            console.log("error: ", error)
             return { data: error.response.data, status: error.response.status };
         } else {
-            return { data: { message: "Network error or server is unreachable" }, status: 500 };
+            return { data: { message: error }, status: 500 };
         }
     }
 }
