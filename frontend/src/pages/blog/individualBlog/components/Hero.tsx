@@ -7,7 +7,9 @@ import { getUserFromId } from '../../../auth/api/AuthRequests'
 import Title from '../../../../components/Title';
 import Subtitle from '../../../../components/Subtitle';
 import Text from '../../../../components/Text';
-
+import bg from '../../../../assets/home1/slide-background.png'
+import Background from '../../../../components/Background';
+import bg2 from  '../../../../assets/home1/slide-background-2.png'
 interface DisplayPostObject {
   post_id: number;
   user_id: number;
@@ -61,19 +63,24 @@ const Hero = () => {
   if (!post) return <div tw="flex justify-center items-center h-screen">Cannot find post </div>; // Enhanced loading state
 
   return (
-    <Container>
-      <Image src={post.image_url} alt="Blog Post" tw='w-full h-full'/>
-      <Content>
-        <Title>{post.title || 'No Title'}</Title>
-        <AuthorDate>
-          <p>Author: {userPost}</p>
-          <p>Date posted: {new Date(post.post_date).toLocaleDateString()}</p>
-          <p>Likes: {post.like_count}</p>
-        </AuthorDate>
-        <Subtitle>{post.tag || 'No Tag'}</Subtitle>
-        <Text>{post.text_content}</Text>
-      </Content>
-    </Container>
+    <div>
+      <Background src={bg} tw='mt-[-200px] ml-[-200px]' />
+    
+      <Container>
+        <Image src={post.image_url} alt="Blog Post" tw='w-full h-full'/>
+        <Content>
+          <Title>{post.title || 'No Title'}</Title>
+          <AuthorDate>
+            <p>Author: {userPost}</p>
+            <p>Date posted: {new Date(post.post_date).toLocaleDateString()}</p>
+            <p>Likes: {post.like_count}</p>
+          </AuthorDate>
+          <Subtitle>{post.tag || 'No Tag'}</Subtitle>
+          <Text>{post.text_content}</Text>
+        </Content>
+      </Container>
+      <Background src={bg2} tw='mt-[-300px] ml-[400px]'/>
+    </div>
   );
 }
 

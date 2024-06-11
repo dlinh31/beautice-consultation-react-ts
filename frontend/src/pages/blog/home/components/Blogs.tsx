@@ -78,7 +78,9 @@ const Blogs = () => {
 
 
     return (
-        <div tw='mb-[200px] mt-[219px] flex justify-between'>
+        <div tw='mb-[200px] mt-[219px] flex justify-between
+        lg:(flex-col items-center)
+        '>
         
             <div tw='max-w-[64%] flex flex-col gap-[135px]'>
                 {currentPosts.map((data, index) => (
@@ -133,7 +135,7 @@ const Blogs = () => {
                                 <Subtitle tw='text-1st-color font-normal'>Create post</Subtitle>
                                 <img src={createPostIcon} tw='h-[25px] w-[25px]' />
                             </button>
-                            {isModalOpen && <CreatePostModal ></CreatePostModal>}
+                            {isModalOpen && <CreatePostModal onClose={closeModal} ></CreatePostModal>}
                         </div>
                     </div>
                 </div>
