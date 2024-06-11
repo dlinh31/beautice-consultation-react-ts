@@ -1,6 +1,8 @@
 import client from './ConnectDBControllers';
 import Joi from 'joi';
 import {Request, Response} from 'express';
+import { fromUnixTime, format } from 'date-fns';
+
 
 // create post, delete post, get posts of an user, get all posts in reverse-chronological order, update post content. 
 
@@ -66,13 +68,18 @@ const getPostsFromUser = async (req: Request, res: Response) => {
 }
 
 const createPost = async (req: Request, res: Response) => { //TODO add joi validate for create post
-    const postData:postObject = req.body.postData
+    const postData:postObject = req.body.postData;
 
     const {user_id, title, tag, text_content, post_date, image_url, like_count} = postData;
+
+    const date = new Date(post_date);
+    const timestamp = date.toISOString();
+
+
     try {
         const result = await client.query(`INSERT INTO beautice.posts (user_id, title, tag, text_content, post_date, image_url, like_count)
         VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING post_id, user_id, title, tag, text_content, post_date, image_url, like_count
-        `, [user_id, title, tag, text_content, post_date, image_url, like_count])
+        `, [user_id, title, tag, text_content, timestamp, image_url, like_count])
         if (result.rowCount === 1){
             res.status(200).json(result.rows[0])
         } else{

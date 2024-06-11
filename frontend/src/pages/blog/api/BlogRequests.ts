@@ -41,8 +41,36 @@ const getAllPosts = async() => {
     }
 }
 
-const uploadPostPhoto = async () => {
-    
+const uploadPostPhoto = async (formData: FormData) => {
+    try {
+        const response = await axios.post(`${baseUrl}/uploadImage`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return response
+        // Handle further actions after successful upload if necessary, e.g., showing a success message, clearing the form, etc.
+    } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+            return { data: error.response.data, status: error.response.status };
+        } else {
+            return { data: { message: error }, status: 500 };
+        }
+    }
 }
 
-export { getPostById, getAllPosts }
+const createPost = async (postData: postObject) => {
+    try {
+        const response = await axios.post(`${baseUrl}/createPost`, {postData: postData});
+        return response
+    } catch(error){
+        if (axios.isAxiosError(error) && error.response) {
+            return { data: error.response.data, status: error.response.status };
+        } else {
+            return { data: { message: error }, status: 500 };
+        }
+    }
+}
+
+export { getPostById, getAllPosts, uploadPostPhoto, createPost };
+export type { postObject };

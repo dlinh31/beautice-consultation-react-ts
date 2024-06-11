@@ -23,12 +23,23 @@ const Hero = () => {
   const { postId } = useParams<{postId?: string}>();
   const [post, setPost] = useState<DisplayPostObject>();
   const [userPost, setUserPost] = useState("");
-
+  const [error, setError] = useState(false);
+  
   useEffect(() => {
     const fetchPost = async () => {
       if (postId) {
-        const res = await getPostById(parseInt(postId));
-        setPost(res.data);
+        try{
+          const res = await getPostById(parseInt(postId));
+          if (res.status === 400) {
+            setError(true);
+            return
+          }
+          setPost(res.data);
+        } catch(error){
+          setError(true);
+          return
+        }
+        
       }
     };
 
@@ -47,11 +58,11 @@ const Hero = () => {
     }
   }, [post]);
 
-  if (!post) return <div tw="flex justify-center items-center h-screen">Loading...</div>; // Enhanced loading state
+  if (!post) return <div tw="flex justify-center items-center h-screen">Cannot find post </div>; // Enhanced loading state
 
   return (
     <Container>
-      <Image src={post.image_url} alt="Blog Post" />
+      <Image src={post.image_url} alt="Blog Post" tw='w-full h-full'/>
       <Content>
         <Title>{post.title || 'No Title'}</Title>
         <AuthorDate>
@@ -69,15 +80,15 @@ const Hero = () => {
 export default Hero;
 
 const Container = styled.div`
-  ${tw`mb-[100px] mt-[50px] flex justify-between`}
+  ${tw`mb-[100px] mt-[50px] flex flex-col justify-between`}
 `;
 
 const Image = styled.img`
-  ${tw`w-full h-auto max-w-[40%] rounded-lg shadow-lg`}
+  ${tw`w-full h-auto max-w-[70%] rounded-lg shadow-lg mb-5`}
 `;
 
 const Content = styled.div`
-  ${tw`max-w-[58%] flex flex-col gap-[20px]`}
+  ${tw`max-w-[70%] flex flex-col gap-[20px]`}
 `;
 
 const AuthorDate = styled.div`

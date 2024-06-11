@@ -73,7 +73,7 @@ const Navbar = () => {
       <div tw="flex justify-between items-center mt-[2.5rem] mr-[0.125rem] pt-0  lg:(p-[1rem 4rem] mt-[1rem]) md:(p-[1rem 2rem]) sm:(p-[1rem])">
         <div tw="flex flex-row items-center justify-center">
 
-        <img tw='my-0 w-[4.9375rem] self-center z-30' src={Logo} alt="logo" />
+        <img tw='my-0 w-[4.9375rem] self-center z-20' src={Logo} alt="logo" />
         <p tw='ml-[1.125rem] leading-[2.25rem] tracking-[2.5px] text-[1.5rem] text-[rgba(255, 255, 255, 1)]'>Beautice</p>
         </div>
         <NavbarList isActive={active}>
