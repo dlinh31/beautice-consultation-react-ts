@@ -1,4 +1,4 @@
-import client from './ConnectDBControllers';
+import client from '../config/DBConfig';
 import Joi from 'joi';
 import {Request, Response} from 'express';
 import { fromUnixTime, format } from 'date-fns';

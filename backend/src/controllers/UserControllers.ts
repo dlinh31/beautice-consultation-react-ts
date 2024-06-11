@@ -1,4 +1,4 @@
-import client from './ConnectDBControllers';
+import client from '../config/DBConfig';
 import Joi from 'joi';
 import {Request, Response} from 'express';
 import bcrypt from 'bcrypt'
@@ -138,6 +138,10 @@ const fetchAllUsers = async () => {
   if (userResult.rowCount === 0) {
     return;
   }
+}
+
+const editUserInfo = async (userData: userObject) => {
+  const error = findExistingEmail(userData.email)
 }
 
 

@@ -7,8 +7,8 @@ import { getUserFromId } from '../../../auth/api/AuthRequests'
 import Title from '../../../../components/Title';
 import Subtitle from '../../../../components/Subtitle';
 import Text from '../../../../components/Text';
-import bg from '../../../../assets/home1/slide-background.png'
 import Background from '../../../../components/Background';
+import bg from '../../../../assets/home1/slide-background.png'
 import bg2 from  '../../../../assets/home1/slide-background-2.png'
 interface DisplayPostObject {
   post_id: number;
@@ -60,7 +60,7 @@ const Hero = () => {
     }
   }, [post]);
 
-  if (!post) return <div tw="flex justify-center items-center h-screen">Cannot find post </div>; // Enhanced loading state
+  if (!post) return <div tw="flex justify-center items-center h-screen">Cannot find post </div>;
 
   return (
     <div>

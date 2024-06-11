@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 import { Request, Response, NextFunction } from 'express';
-import client from '../controllers/ConnectDBControllers';
+import client from '../config/DBConfig';
 
 
 const userAuth = async (req: Request, res: Response, next: NextFunction) => {
