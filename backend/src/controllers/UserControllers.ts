@@ -140,10 +140,22 @@ const fetchAllUsers = async () => {
   }
 }
 
-const editUserInfo = async (userData: userObject) => {
-  const error = findExistingEmail(userData.email)
+const editUserInfo = async (req: Request, res: Response) => {
+  const {first_name, last_name, email} = req.body.userData
+  try {
+    const result = await client.query(`UPDATE beautice.users SET first_name = $1, last_name = $2 WHERE email = $3 
+      RETURNING user_id, email, first_name, last_name` , [first_name, last_name, email]);
+    if (result.rowCount === 1){
+      res.status(200).json(result.rows[0])
+    } else {
+      res.status(500).json({error: "Internal server error at editUserInfo"})  
+    }
+  } catch (error){
+    res.status(500).json({error: error})
+  }
+  
 }
 
 
 
-export {SignInUser, SignUpUser, verifyJWT, fetchUserFromId}
+export {SignInUser, SignUpUser, verifyJWT, fetchUserFromId, editUserInfo}

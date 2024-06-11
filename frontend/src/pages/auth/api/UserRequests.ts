@@ -67,6 +67,21 @@ const getUserFromId = async(userId: number) => {
     }
 }
 
+const editUserInfo = async (userInfo: {email: string, first_name: string, last_name: string}) => {
+    try {
+        const response = await axios.patch(`${baseUrl}/editUserInfo`, {userData: userInfo})
+        return response
 
-export {userSignUpAPI, userSignInAPI, verifyToken, getUserFromId}
+    } catch (error){
+        if (axios.isAxiosError(error) && error.response) {
+            console.log("error: ", error)
+            return { data: error.response.data, status: error.response.status };
+        } else {
+            return { data: { message: "Network error or server is unreachable" }, status: 500 };
+        }
+    }
+}
+
+
+export {userSignUpAPI, userSignInAPI, verifyToken, getUserFromId, editUserInfo}
 

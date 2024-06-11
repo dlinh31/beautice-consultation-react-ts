@@ -17,7 +17,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { useAtom } from 'jotai';
 import { LoginInfoAtom } from '../../../context/loginInfoAtom';
-import { userSignUpAPI } from '../api/AuthRequests';
+import { userSignUpAPI } from '../api/UserRequests';
 
 interface signUpInfoObject {
   email: string,

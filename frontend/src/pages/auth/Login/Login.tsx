@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Avatar, Button, Checkbox, FormControlLabel, Box, ThemeProvider } from '@mui/material';
 import LockPersonIcon from '@mui/icons-material/LockPerson';
-import { userSignInAPI } from '../api/AuthRequests';
+import { userSignInAPI } from '../api/UserRequests';
 import { CustomTextField, Title, CustomTheme } from '../components';
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';

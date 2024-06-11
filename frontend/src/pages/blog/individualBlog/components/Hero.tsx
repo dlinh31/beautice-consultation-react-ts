@@ -3,7 +3,7 @@ import tw from 'twin.macro';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { getPostById } from '../../api/BlogRequests';
-import { getUserFromId } from '../../../auth/api/AuthRequests'
+import { getUserFromId } from '../../../auth/api/UserRequests'
 import Title from '../../../../components/Title';
 import Subtitle from '../../../../components/Subtitle';
 import Text from '../../../../components/Text';

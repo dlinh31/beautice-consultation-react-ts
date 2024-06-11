@@ -3,6 +3,7 @@ import tw from 'twin.macro'
 import styled from 'styled-components';
 import { useAtom } from 'jotai';
 import { userAtom } from '../../../context/userAtom';
+import {editUserInfo} from '../../auth/api/UserRequests'
 import Title from '../../../components/Title';
 import Subtitle from '../../../components/Subtitle';
 import Text from '../../../components/Text';
@@ -29,18 +30,33 @@ const UserProfile = () => {
 
     const [user, setUser] = useAtom(userAtom);
     const [isEditing, setIsEditing] = useState(false);
-    const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("")
 
-    const toggleEdit = () => {
-        setIsEditing(!isEditing);
-        if (isEditing){
-            
+    const toggleEdit = async () => {
+        if (!isEditing){
+            setIsEditing(!isEditing);
+            setFirstName(user.first_name);
+            setLastName(user.last_name);
+        } else {
+            const res = await editUserInfo({email: user.email, first_name: firstName, last_name: lastName})
+            if (res.status !== 200){
+                setError("Internal server error")
+            } else {
+                setIsEditing(false);
+                setUser(prevUser => ({
+                    ...prevUser,
+                    first_name: firstName,
+                    last_name: lastName
+                }));
+                setFirstName("")
+                setLastName("")
+                setSuccess("Profile updated successfully!");
+
+            }
         }
-        setEmail(user.email)
-        setFirstName(user.first_name)
-        setLastName(user.last_name)
     };
 
     return (
@@ -50,11 +66,11 @@ const UserProfile = () => {
             <div tw="bg-white p-8 rounded-[50px] shadow-[-2px 4px 31px 9px rgba(242, 244, 255, 1)] w-full max-w-full">
                 <div tw="flex justify-between items-center mb-10">
                     <Title tw="text-3xl font-semibold">Your profile</Title>
-                    <Button onClick={toggleEdit} tw="bg-3rd-color text-white py-2 px-6">
+                    <Button onClick={toggleEdit} tw="bg-3rd-color text-white py-3 px-8">
                         {isEditing ? 'Save' : 'Edit'}
                     </Button>
                 </div>
-                <div tw="grid grid-cols-2 gap-10 mb-4">
+                <div tw="grid grid-cols-2 gap-10 mb-8">
                     <InputContainer>
                         <Subtitle>User ID:</Subtitle>
                         <Input placeholder={user.user_id.toString()} readOnly={true}     
@@ -63,8 +79,7 @@ const UserProfile = () => {
 
                     <InputContainer>
                         <Subtitle>Email address:</Subtitle>
-                        <Input placeholder={user.email} readOnly={!isEditing} value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setEmail(e.target.value)}}    
-                        style={inputStyles[isEditing ? "editable" : "notEditable"]} />
+                        <Input placeholder={user.email} readOnly={!isEditing} style={inputStyles["notEditable"]} />
                     </InputContainer>
 
                     <InputContainer tw='flex flex-col gap-3'>
@@ -78,8 +93,20 @@ const UserProfile = () => {
                         <Input placeholder={user.last_name} readOnly={!isEditing} value={lastName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setLastName(e.target.value)}}
                          style={inputStyles[isEditing ? "editable" : "notEditable"]} />
                     </InputContainer>
-
                 </div>
+
+                {error && 
+                  (<div tw="flex flex-col items-center mb-4 p-2 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-[50px] relative" role="alert">
+                      <strong tw="font-bold">Error!</strong>
+                      <span tw="block sm:inline"> {error}</span>
+                  </div>)
+                }
+                 {success && (
+                <div tw="flex flex-col items-center mb-4 p-2 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-[50px] relative" role="alert">
+                    <strong tw="font-bold">Success!</strong>
+                    <span tw="block sm:inline">{success}</span>
+                </div>
+                )}
             </div>
         </div>
         </div>

@@ -1,9 +1,9 @@
 import { Navigate, Outlet } from "react-router-dom"
 import { useAtom } from "jotai";
 import { User, defaultUser, userAtom } from '../../../context/userAtom';
-import { verifyToken } from "../api/AuthRequests";
+import { verifyToken } from "../api/UserRequests";
 import { useState, useEffect } from 'react';
-import { getUserFromId } from "../api/AuthRequests";
+import { getUserFromId } from "../api/UserRequests";
 
 const verifyJWT = async () => {
     const userToken = localStorage.getItem('token') || '';
