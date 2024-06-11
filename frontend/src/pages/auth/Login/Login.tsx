@@ -42,13 +42,14 @@ export default function Login() {
         throw new Error(response.data.error || "An unknown error occurred");
       }
       console.log("Sign in successfully");
-      const { user_id, email, first_name, last_name, token } = response.data;
+    const { user_id, email, first_name, last_name, token } = response.data;
       const userData = { user_id, email, first_name, last_name };
       
       if (rememberMe){
         localStorage.setItem('token', token);
       }
       const userContext: User = userData;
+      console.log(userContext)
       setUser(userContext);
       return response;
     })

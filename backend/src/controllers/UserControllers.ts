@@ -95,8 +95,8 @@ const SignInUser = async (req: Request, res: Response) => {
           res.status(401).json({error: "Incorrect password."});
           return;
       }
-    const token = generateToken(user.id)
-    res.status(200).json({id: user.id, email:user.email, first_name: user.first_name, last_name: user.last_name, token: token});
+    const token = generateToken(user.user_id)
+    res.status(200).json({user_id: user.user_id, email:user.email, first_name: user.first_name, last_name: user.last_name, token: token});
 } catch (err) {
     console.error('Error executing query', err);
     res.status(500).json({error: "An error occurred while processing your request."});
@@ -107,7 +107,7 @@ const verifyJWT = async (req: Request, res: Response) => {
   const {token} = req.body;
   try{
     const verification: JwtPayload = await verifyToken(token) as JwtPayload;
-    res.status(200).json({id:verification.id})
+    res.status(200).json({user_id:verification.user_id})
   } catch (error){
     res.status(400).json({error: error})
   }
@@ -122,8 +122,8 @@ const fetchUserFromId = async (req: Request, res: Response) => {
       return;
     }
     const user = userResult.rows[0];
-    const {id, email, first_name, last_name} = user;
-    const userData =  {id, email, first_name, last_name}
+    const {user_id, email, first_name, last_name} = user;
+    const userData =  {user_id, email, first_name, last_name}
     res.status(200).json(userData)
   } catch(error){
     res.status(400).json(error)
