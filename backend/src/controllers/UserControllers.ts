@@ -30,7 +30,7 @@ const validateUser = async(userData: userObject) => {
 
 const findExistingEmail = async (email: string) => {
     try {
-        const result = await client.query(`SELECT * FROM users WHERE email= $1;`, [email]);
+        const result = await client.query(`SELECT * FROM beautice.users WHERE email= $1;`, [email]);
         return result.rows.length > 0;
       } catch (err) {
         console.error('Error executing query', (err as Error).stack); 
@@ -65,7 +65,7 @@ const SignUpUser = async (req: Request, res: Response) => {
   // Insert user into database
   try {
       const result = await client.query(
-          'INSERT INTO users (email, password, first_name, last_name) VALUES ($1, $2, $3, $4) RETURNING id, email, first_name, last_name',
+          'INSERT INTO beautice.users (email, password, first_name, last_name) VALUES ($1, $2, $3, $4) RETURNING user_id, email, first_name, last_name',
           [email, hashedPassword, first_name, last_name]
       );
       res.status(200).json(result.rows[0]);  // Successful creation
@@ -83,7 +83,7 @@ const SignInUser = async (req: Request, res: Response) => {
       return;
   }
   try {
-    const userResult = await client.query('SELECT * FROM users WHERE email = $1 ;', [email]);
+    const userResult = await client.query('SELECT * FROM beautice.users WHERE email = $1 ;', [email]);
     if (userResult.rowCount === 0) {
         res.status(404).json({error: "User not found."});
         return;
@@ -115,8 +115,8 @@ const verifyJWT = async (req: Request, res: Response) => {
 
 const fetchUserFromId = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.id;
-    const userResult = await client.query('SELECT * FROM users WHERE id = $1 ;', [userId]);
+    const userId = req.params.userId;
+    const userResult = await client.query('SELECT * FROM beautice.users WHERE user_id = $1 ;', [userId]);
     if (userResult.rowCount === 0) {
       res.status(404).json({error: "User not found."});
       return;

@@ -52,7 +52,9 @@ const getAllPosts = async (req: Request, res: Response) => {
 }
 
 
-const getPostsFromUser = async (userId: number) => {
+const getPostsFromUser = async (req: Request, res: Response) => {
+    const userId = req.params.userId
+
     try {
         const result = await client.query('SELECT * FROM beautice.posts WHERE user_id = $1', [userId]);
 
@@ -63,8 +65,9 @@ const getPostsFromUser = async (userId: number) => {
     }
 }
 
-const createPost = async (req: Request, res: Response) => {
+const createPost = async (req: Request, res: Response) => { //TODO add joi validate for create post
     const postData:postObject = req.body.postData
+
     const {user_id, title, tag, text_content, post_date, image_url, like_count} = postData;
     try {
         const result = await client.query(`INSERT INTO beautice.posts (user_id, title, tag, text_content, post_date, image_url, like_count)
@@ -80,7 +83,8 @@ const createPost = async (req: Request, res: Response) => {
     }
 }
 
-const deletePost = async (postId: number) => {
+const deletePost = async (req: Request, res: Response) => {
+    const postId = req.body.postId;
     try {
         const result = await client.query('DELETE FROM beautice.posts WHERE post_id = $1', [postId])
         return result.rowCount === 1 ? "Delete post successfully" : "Delete post unsuccessfully"

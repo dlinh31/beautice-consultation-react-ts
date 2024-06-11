@@ -148,7 +148,11 @@ const Blogs = () => {
                 <div tw='shadow-[-2px 4px 31px 9px rgba(242, 244, 255, 1)] rounded-[50px] flex overflow-hidden mt-0.5'>
                     <input type="text" placeholder='Search here...' 
                     value={search}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setSearch(e.target.value);
+                        setCurrentPage(1);
+
+                    }}
                     tw='w-full max-w-full py-[20px] pr-[84px] pl-[27px] text-black font-normal leading-[1.5rem] rounded-[50px 0px 0px 50px]
                     placeholder:(text-[rgba(217, 221, 254, 1)])
                     ' />
